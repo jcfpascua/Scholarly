@@ -68,6 +68,7 @@ namespace Scholarly.View
             if (adminViewModel.AuthenticateAdmin(adminUsername, adminPassword))
             {
                 AdminView adminView = new AdminView(adminViewModel.CurrentAdmin.FirstName, adminViewModel.CurrentAdmin.LastName);
+                adminView.SetCurrentAdmin(adminViewModel.CurrentAdmin);
                 adminView.Show();
                 this.Hide();
             }

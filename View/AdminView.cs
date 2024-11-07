@@ -36,6 +36,11 @@ namespace Scholarly.View
 
         }
 
+        public void SetCurrentAdmin(AdminModel admin)
+        {
+            adminViewModel.CurrentAdmin = admin;
+        }
+
         private void Btn_Logout_Click(object sender, EventArgs e)
         {
             LoginView.Instance.Show();
@@ -643,6 +648,37 @@ namespace Scholarly.View
             catch (Exception ex)
             {
                 MessageBox.Show($"Error updating grade: {ex.Message}");
+            }
+        }
+
+        private void Btn_UpdateAdminPassword_Click(object sender, EventArgs e)
+        {
+            string newPassword = Tb_NewAdminPassword.Text;
+            string confirmPassword = Tb_ConfirmAdminPassword.Text;
+
+            if (string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+            {
+                MessageBox.Show("Incomplete fields.");
+                return;
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                MessageBox.Show("Passwords do not match.");
+                return;
+            }
+
+            bool match = adminViewModel.UpdateAdminPassword(newPassword);
+
+            if (match)
+            {
+                MessageBox.Show("Password updated successfully.");
+                Tb_NewAdminPassword.Clear();
+                Tb_ConfirmAdminPassword.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Error has occured.");
             }
         }
     }

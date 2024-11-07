@@ -35,7 +35,7 @@ namespace Scholarly.ViewModel
                 string query = "SELECT * FROM Admins WHERE Username = @Username AND Password = @Password";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue ("password", password);
+                command.Parameters.AddWithValue ("@Password", password);
                 SqlDataReader reader = command.ExecuteReader();
 
                 if (reader.Read())
@@ -64,32 +64,32 @@ namespace Scholarly.ViewModel
             return string.Empty;
         }
 
-        //public bool UpdateAdminPassword(string newPassword)
-        //{
-        //    if (CurrentAdmin == null)
-        //    {
-        //        return false;
-        //    }
+        public bool UpdateAdminPassword(string newPassword)
+        {
+            if (CurrentAdmin == null)
+            {
+                return false;
+            }
 
-        //    try
-        //    {
-        //        using (SqlConnection connection = new SqlConnection(connectionString))
-        //        {
-        //            connection.Open();
-        //            string query = "UPDATE Admins SET Password = @Password WHERE AdminId = @AdminId";
-        //            SqlCommand command = new SqlCommand(query, connection);
-        //            command.Parameters.AddWithValue("@Password", newPassword);
-        //            command.Parameters.AddWithValue("@AdminId", CurrentAdmin.AdminId);
-        //            int rowsAffected = command.ExecuteNonQuery();
-        //            return rowsAffected > 0;
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine($"An error occurred: {e.Message}");
-        //        return false;
-        //    }
-        //}
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Admins SET Password = @Password WHERE AdminId = @AdminId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Password", newPassword);
+                    command.Parameters.AddWithValue("@AdminId", CurrentAdmin.AdminId);
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"An error occurred: {e.Message}");
+                return false;
+            }
+        }
 
 
         public void AddAdmin(AdminModel admin)
@@ -106,8 +106,8 @@ namespace Scholarly.ViewModel
 
                 string formattedId = $"A{newAdminId:D3}";
 
-                string email = $"{admin.FirstName}.{admin.LastName}@mcm.edu.ph".ToLower();
-                string username = $"{admin.FirstName}{admin.LastName}".ToLower();
+                string email = $"{admin.FirstName}.{admin.LastName}@mcm.edu.ph".Replace(" ", "").ToLower();
+                string username = $"{admin.FirstName}{admin.LastName}".Replace(" ", "").ToLower();
 
                 admin.AdminId = formattedId;
                 admin.Email = email;
@@ -143,8 +143,8 @@ namespace Scholarly.ViewModel
 
                 string formattedId = $"S{newStudentId:D3}";
 
-                string email = $"{student.FirstName}.{student.LastName}@mcm.edu.ph".ToLower();
-                string username = $"{student.FirstName}{student.LastName}".ToLower();
+                string email = $"{student.FirstName}.{student.LastName}@mcm.edu.ph".Replace(" ", "").ToLower();
+                string username = $"{student.FirstName}{student.LastName}".Replace(" ", "").ToLower();
 
                 student.StudentId = formattedId; 
                 student.Email = email;
@@ -233,10 +233,10 @@ namespace Scholarly.ViewModel
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@EnrollmentId", enrollment.EnrollmentId);
-                    command.Parameters.AddWithValue("@StudentId", enrollment.StudentId);  // StudentId comes from the model
-                    command.Parameters.AddWithValue("@CourseId", enrollment.CourseId);    // CourseId comes from the model
+                    command.Parameters.AddWithValue("@StudentId", enrollment.StudentId);   
+                    command.Parameters.AddWithValue("@CourseId", enrollment.CourseId);    
                     command.Parameters.AddWithValue("@EnrollmentDate", enrollment.EnrollmentDate);
-                    command.Parameters.AddWithValue("@Grade", enrollment.Grade);          // Assuming Grade is being set elsewhere
+                    command.Parameters.AddWithValue("@Grade", enrollment.Grade);          
 
                     command.ExecuteNonQuery();
                 }

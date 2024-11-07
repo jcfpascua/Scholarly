@@ -139,7 +139,6 @@ public class StudentViewModel
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Password", newPassword);
                 command.Parameters.AddWithValue("@StudentId", CurrentStudent.StudentId);
-
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected > 0;
             }
