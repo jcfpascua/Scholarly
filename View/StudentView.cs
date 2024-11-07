@@ -49,6 +49,7 @@ namespace Scholarly.View
             dt.Columns.Add("Credits");
             dt.Columns.Add("Description");
             dt.Columns.Add("Enrollment Date");
+            dt.Columns.Add("Grade");
 
             foreach (var item in coursesWithDates)
             {
@@ -57,7 +58,8 @@ namespace Scholarly.View
                              item.Course.CourseCode,
                              item.Course.Credits,
                              item.Course.Description,
-                             item.EnrollmentDate.ToString("MMMM dd, yyyy")); 
+                             item.EnrollmentDate.ToString("MMMM dd, yyyy"),
+                             item.Grade); 
             }
 
             Dg_StudentRecord.DataSource = dt;

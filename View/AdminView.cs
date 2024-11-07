@@ -621,5 +621,29 @@ namespace Scholarly.View
 
             Tb_SearchStudentToEnroll.Clear();
         }
+
+        private void Btn_UpdateGrade_Click(object sender, EventArgs e)
+        {
+            string studentId = Tb_StudentToEnroll.Text.Trim();
+            string courseId = Tb_CourseToEnroll.Text.Trim();
+            string newGrade = Tb_Grade.Text.Trim();
+
+            // Validate input
+            if (string.IsNullOrWhiteSpace(studentId) || string.IsNullOrWhiteSpace(courseId) || string.IsNullOrWhiteSpace(newGrade))
+            {
+                MessageBox.Show("Please enter Student ID, Course ID, and the new grade.");
+                return;
+            }
+
+            try
+            {
+                adminViewModel.UpdateGrade(studentId, courseId, newGrade);
+                MessageBox.Show("Grade updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating grade: {ex.Message}");
+            }
+        }
     }
 }

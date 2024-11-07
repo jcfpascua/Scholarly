@@ -57,23 +57,22 @@ public class StudentViewModel
         }
     }
 
-    public List<(CourseModel Course, DateTime EnrollmentDate)> GetCoursesForStudent()
+    public List<(CourseModel Course, DateTime EnrollmentDate, string Grade)> GetCoursesForStudent()
     {
         if (CurrentStudent == null)
-            return new List<(CourseModel, DateTime)>();
+            return new List<(CourseModel, DateTime, string)>();
 
-        List<(CourseModel, DateTime)> coursesWithDates = new List<(CourseModel, DateTime)>();
+        List<(CourseModel, DateTime, string)> coursesWithDates = new List<(CourseModel, DateTime, string)>();
 
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            string query = "SELECT c.CourseId, c.CourseName, c.CourseCode, c.Credits, c.Description, e.EnrollmentDate " +
+            string query = "SELECT c.CourseId, c.CourseName, c.CourseCode, c.Credits, c.Description, e.EnrollmentDate, e.Grade " +
                            "FROM Courses c " +
                            "JOIN Enrollments e ON c.CourseId = e.CourseId " +
                            "WHERE e.StudentId = @StudentId";
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@StudentId", CurrentStudent.StudentId);
-            Console.WriteLine($"Executing query for StudentId: {CurrentStudent.StudentId}");
             SqlDataReader reader = command.ExecuteReader();
 
             while (reader.Read())
@@ -88,7 +87,8 @@ public class StudentViewModel
                 };
 
                 var enrollmentDate = Convert.ToDateTime(reader["EnrollmentDate"]);
-                coursesWithDates.Add((course, enrollmentDate));
+                var grade = reader["Grade"] != DBNull.Value ? reader["Grade"].ToString() : "";
+                coursesWithDates.Add((course, enrollmentDate, grade));
             }
         }
         return coursesWithDates;

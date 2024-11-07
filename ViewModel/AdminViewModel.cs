@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Scholarly.ViewModel
 {
@@ -25,53 +26,6 @@ namespace Scholarly.ViewModel
                 connection.Open();
             }
         }
-
-        //public void AddStudent(StudentModel student)
-        //{
-        //    // Call the data access layer or repository to add the student to the database
-        //    Console.WriteLine($"Student {student.FirstName} {student.LastName} has been added.");
-        //    LogRegistrarAction("Added student");
-        //}
-
-        //public void UpdateStudent(StudentModel student)
-        //{
-        //    // Call the data access layer or repository to update the student in the database
-        //    Console.WriteLine($"Student {student.StudentId} has been updated.");
-        //    LogRegistrarAction("Updated student");
-        //}
-
-        //public void DeleteStudent(string studentId)
-        //{
-        //    // Call the data access layer or repository to delete the student from the database
-        //    Console.WriteLine($"Student with ID {studentId} has been deleted.");
-        //    LogRegistrarAction("Deleted student");
-        //}
-
-        //public void AddCourse(CourseModel course)
-        //{
-        //    // Call the data access layer or repository to add the course to the database
-        //    Console.WriteLine($"Course {course.CourseName} has been added.");
-        //    LogRegistrarAction("Added course");
-        //}
-
-        //public void UpdateCourse(CourseModel course)
-        //{
-        //    // Call the data access layer or repository to update the course in the database
-        //    Console.WriteLine($"Course {course.CourseId} has been updated.");
-        //    LogRegistrarAction("Updated course");
-        //}
-
-        //public void DeleteCourse(string courseId)
-        //{
-        //    // Call the data access layer or repository to delete the course from the database
-        //    Console.WriteLine($"Course with ID {courseId} has been deleted.");
-        //    LogRegistrarAction("Deleted course");
-        //}
-
-        //private void LogRegistrarAction(string action)
-        //{
-        //    Console.WriteLine($"{DateTime.Now}: Registrar performed action: {action}");
-        //}
 
         public bool AuthenticateAdmin(string username, string password)
         {
@@ -100,6 +54,43 @@ namespace Scholarly.ViewModel
                 return false;
             }
         }
+
+        public string GetAdminFullName()
+        {
+            if (CurrentAdmin != null)
+            {
+                return $"{CurrentAdmin.FirstName} {CurrentAdmin.LastName}";
+            }
+            return string.Empty;
+        }
+
+        //public bool UpdateAdminPassword(string newPassword)
+        //{
+        //    if (CurrentAdmin == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+        //            string query = "UPDATE Admins SET Password = @Password WHERE AdminId = @AdminId";
+        //            SqlCommand command = new SqlCommand(query, connection);
+        //            command.Parameters.AddWithValue("@Password", newPassword);
+        //            command.Parameters.AddWithValue("@AdminId", CurrentAdmin.AdminId);
+        //            int rowsAffected = command.ExecuteNonQuery();
+        //            return rowsAffected > 0;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine($"An error occurred: {e.Message}");
+        //        return false;
+        //    }
+        //}
+
 
         public void AddAdmin(AdminModel admin)
         {
@@ -620,6 +611,37 @@ namespace Scholarly.ViewModel
 
                     int result = command.ExecuteNonQuery();
                     return result > 0;
+                }
+            }
+        }
+
+        public void UpdateGrade(string studentId, string courseId, string newGrade)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string checkEnrollmentQuery = "SELECT COUNT(*) FROM Enrollments WHERE StudentId = @StudentId AND CourseId = @CourseId";
+                using (SqlCommand checkCommand = new SqlCommand(checkEnrollmentQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@StudentId", studentId);
+                    checkCommand.Parameters.AddWithValue("@CourseId", courseId);
+
+                    int enrollmentCount = (int)checkCommand.ExecuteScalar();
+                    if (enrollmentCount == 0)
+                    {
+                        throw new Exception("The student is not enrolled in the specified course.");
+                    }
+                }
+
+                string updateGradeQuery = "UPDATE Enrollments SET Grade = @NewGrade WHERE StudentId = @StudentId AND CourseId = @CourseId";
+                using (SqlCommand updateCommand = new SqlCommand(updateGradeQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@NewGrade", newGrade);
+                    updateCommand.Parameters.AddWithValue("@StudentId", studentId);
+                    updateCommand.Parameters.AddWithValue("@CourseId", courseId);
+
+                    updateCommand.ExecuteNonQuery();
                 }
             }
         }

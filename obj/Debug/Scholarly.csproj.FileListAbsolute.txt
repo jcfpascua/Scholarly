@@ -1,0 +1,15 @@
+C:\Users\jakir\source\repos\Scholarly\bin\Debug\Scholarly.exe.config
+C:\Users\jakir\source\repos\Scholarly\bin\Debug\Scholarly.exe
+C:\Users\jakir\source\repos\Scholarly\bin\Debug\Scholarly.pdb
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.csproj.AssemblyReference.cache
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.Properties.Resources.resources
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.csproj.GenerateResource.cache
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.csproj.CoreCompileInputs.cache
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.exe
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.pdb
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.View.LoginView.resources
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.View.StudentView.resources
+C:\Users\jakir\source\repos\Scholarly\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\jakir\source\repos\Scholarly\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.csproj.Up2Date
+C:\Users\jakir\source\repos\Scholarly\obj\Debug\Scholarly.View.AdminView.resources
